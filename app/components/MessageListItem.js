@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
 
 export default class MessageListItem extends Component {
-    constructor(props) {
-        super(props);
+    static getStores () {
+        return [MessageStore];
+    }
+
+    static calculateState (prevState) {
+        return {
+            messages: MessageStore.getState()
+        }
     }
 
     render() {

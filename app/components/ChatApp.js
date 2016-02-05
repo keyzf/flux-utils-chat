@@ -1,29 +1,15 @@
 import React, {Component} from 'react';
-import {Container} from 'flux/utils';
 import MessageStore from '../stores/MessageStore';
 import MessageSection from './MessageSection';
+import ThreadSection from './ThreadSection';
 
-class ChatApp extends Component {
-
-	  static getStores () {
-		    return [MessageStore];
-	  }
-
-	  static calculateState (prevState) {
-		    return {
-			      messages: MessageStore.getState()
-		    }
-	  }
-
+export default class ChatApp extends Component {
     render() {
-    	  return (
-    	      <div className="chatapp">
-      			    <div>ChatApp</div>
-      			    <MessageSection messages={this.state.messages}/>
-      		  </div>
+    	return (
+    	    <div className="chatapp">
+      			<MessageSection />
+      			<ThreadSection />
+      		</div>
     	  );
     }
 }
-
-const container = Container.create(ChatApp);
-export default container;
