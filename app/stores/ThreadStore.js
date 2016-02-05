@@ -4,7 +4,15 @@ import {ReduceStore} from "flux/utils";
 import dispatcher from "../dispatcher/ChatAppDispatcher";
 import Thread from "./Thread";
 
+let _currentID = "t1";
+
 class ThreadStore extends ReduceStore {
+    getCurrentID () {
+        return _currentID;
+    }
+    getCurrent () {
+        return this.getState().get(this.getCurrentID());
+    }
 	getInitialState () {
 		let item = new Message({
             id: 'm1',
