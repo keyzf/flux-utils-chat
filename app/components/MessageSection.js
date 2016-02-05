@@ -19,9 +19,8 @@ class MessageSection extends Component {
     }
 
     static calculateState (prevState) {
-        console.log(prevState);
         return {
-            messages: MessageStore.getState(),
+            messages: MessageStore.getAllForCurrentThread(),
             thread: ThreadStore.getCurrent(),
         }
     }

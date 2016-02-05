@@ -13,7 +13,7 @@ export default class ThreadListItem extends Component {
             })}>
             	<h5 className="thread-name">{thread.name}</h5>
             	<div className="thread-time">
-            		{lastMessage.timestamp.toLocaleTimeString()}
+            		{lastMessage.date.toLocaleTimeString()}
             	</div>
             	<div className="thread-last-message">
             		{lastMessage.text}

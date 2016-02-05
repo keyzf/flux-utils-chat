@@ -3,8 +3,9 @@ import Immutable from "immutable";
 import {ReduceStore} from "flux/utils";
 import dispatcher from "../dispatcher/ChatAppDispatcher";
 import Thread from "./Thread";
+import ChatMessageUtils from "../utils/ChatMessageUtils";
 
-let _currentID = "t1";
+let _currentID = "t_1";
 
 class ThreadStore extends ReduceStore {
     getCurrentID () {
@@ -14,41 +15,33 @@ class ThreadStore extends ReduceStore {
         return this.getState().get(this.getCurrentID());
     }
 	getInitialState () {
-		let item = new Message({
-            id: 'm1',
-            threadID: 't1',
-            threadName: 'Jing and Bill',
-            authorName: 'Bill',
-            text: 'Hey Jing, want to give a Flux talk at ForwardJS?',
-            timestamp: new Date(Date.now() - 99999)
-        });
-        let item2 = new Message({
-            id: 'm2',
-            threadID: 't2',
-            threadName: 'Jing and Bill',
-            authorName: 'Bill',
-            text: 'Hey Jing, want to give a Flux talk at ForwardJS?',
-            timestamp: new Date(Date.now() - 99999)
-        });
-        let threadItem = new Thread({
-        	id: 't1',
-        	name: 'Jing and Bill',
-        	lastMessage: item
-        })
-        let threadItem2 = new Thread({
-        	id: 't2',
-        	name: 'Jing and Bill2',
-        	lastMessage: item2
-        })
-		let map = new Immutable.OrderedMap();
-		map = map.set(threadItem.id, threadItem);
-		map = map.set(threadItem2.id, threadItem2);
-		return map;
+        return new Immutable.Map();
 	}
+    init (rawMessages) {
+        let map = new Immutable.Map();
+        let _this = this;
+        rawMessages.forEach(function (msg) {
+            let thread = map.get(msg.threadID);
+            if(thread && thread.lastMessage.date.getTime() > msg.timestamp) {
+                return;
+            }
+            let message = new Message(ChatMessageUtils.convertRawMessage(msg, _this.getCurrentID()));
+            thread = new Thread({
+                id: msg.threadID,
+                name: msg.threadName,
+                lastMessage: message,
+            })
+            map = map.set(thread.id, thread);
+        });
+        return map;
+    }
 	reduce (state, action) {
-		console.log(state);
-		console.log(action);
-		return state;
+        switch(action.type) {
+            case 'chat/receive_raw_messages':
+                return this.init(action.rawMessages);
+            default:
+                return state;
+        }
 	}
 }
 

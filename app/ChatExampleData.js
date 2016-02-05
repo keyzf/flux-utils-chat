@@ -10,7 +10,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-module.exports = {
+const data = {
 
   init: function() {
     localStorage.clear();
@@ -75,3 +75,5 @@ module.exports = {
   }
 
 };
+
+export default data;

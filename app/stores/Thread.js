@@ -1,9 +1,9 @@
 import Immutable from "immutable";
 
-const THread = Immutable.Record({
+const Thread = Immutable.Record({
 	id: undefined,
 	name: undefined,
 	lastMessage: undefined,
 })
 
-export default THread;
+export default Thread;

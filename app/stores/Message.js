@@ -6,7 +6,7 @@ const Message = Immutable.Record({
 	threadName: undefined,
 	authorName: undefined,
 	text: undefined,
-	timestamp: undefined,
+	date: undefined,
 })
 
 export default Message;

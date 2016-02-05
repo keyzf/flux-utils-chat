@@ -2,26 +2,34 @@ import Message from "./Message";
 import Immutable from "immutable";
 import {ReduceStore} from "flux/utils";
 import dispatcher from "../dispatcher/ChatAppDispatcher";
+import ThreadStore from "./ThreadStore";
+import ChatMessageUtils from "../utils/ChatMessageUtils";
 
 class MessageStore extends ReduceStore {
 	getInitialState () {
-        let item = new Message({
-            id: 'm1',
-            threadID: 't1',
-            threadName: 'Jing and Bill',
-            authorName: 'Bill',
-            text: 'Hey Jing, want to give a Flux talk at ForwardJS?',
-            timestamp: new Date(Date.now() - 99999)
-        });
-		let map = new Immutable.OrderedMap();
-		map = map.set(item.id, item);
-		return map;
+		return new Immutable.OrderedMap();
 	}
+
+	getAllForThread (threadID) {
+		return this.getState().filter(msg => { return msg.threadID === threadID })
+	}
+
+	getAllForCurrentThread () {
+		return this.getAllForThread(ThreadStore.getCurrentID());
+	}
+
 	reduce (state, action) {
-		console.log("reduce");
-		console.log(state);
-		console.log(action);
-		return state;
+		switch(action.type) {
+			case "chat/receive_raw_messages":
+				let state = Immutable.OrderedMap(action.rawMessages.map(msg => {
+					let message = new Message(ChatMessageUtils.convertRawMessage(msg, ThreadStore.getCurrentID()));
+					return [message.id, message];
+				}))
+			    dispatcher.waitFor([ThreadStore.getDispatchToken()]);
+			    return state;
+			default:
+				return state;
+		}
 	}
 }
 
