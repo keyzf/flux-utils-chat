@@ -26,6 +26,7 @@ class MessageSection extends Component {
     }
 
     render() {
+        console.log("render MessageSection")
         const message_list = [];
         if(this.state.messages.size === 0){
             return null;

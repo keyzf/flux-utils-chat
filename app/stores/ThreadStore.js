@@ -39,6 +39,10 @@ class ThreadStore extends ReduceStore {
         switch(action.type) {
             case 'chat/receive_raw_messages':
                 return this.init(action.rawMessages);
+            case 'chat/click_thread':
+                _currentID = action.threadID;
+                this.__emitChange();
+                return state;
             default:
                 return state;
         }
