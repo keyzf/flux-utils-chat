@@ -7,6 +7,7 @@ const Message = Immutable.Record({
 	authorName: undefined,
 	text: undefined,
 	date: undefined,
+	isRead: undefined,
 })
 
 export default Message;

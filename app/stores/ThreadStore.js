@@ -5,7 +5,8 @@ import dispatcher from "../dispatcher/ChatAppDispatcher";
 import Thread from "./Thread";
 import ChatMessageUtils from "../utils/ChatMessageUtils";
 
-let _currentID = "t_1";
+let _eldThreadID = null;
+let _currentID = null;
 
 class ThreadStore extends ReduceStore {
     getCurrentID () {
@@ -32,16 +33,25 @@ class ThreadStore extends ReduceStore {
                 lastMessage: message,
             })
             map = map.set(thread.id, thread);
-        });
-        return map;
+        }); 
+
+        if(!_currentID) {
+            let allChrono = map.sortBy(thread => thread.lastMessage.date);
+            _currentID = allChrono.last().id;
+        }
+
+        return map.setIn([_currentID, 'lastMessage', 'isRead'], true);
+    }
+    areEqual(one, two) {
+        return _eldThreadID === _currentID && one.equals(two);
     }
 	reduce (state, action) {
+        _eldThreadID = _currentID;
         switch(action.type) {
             case 'chat/receive_raw_messages':
                 return this.init(action.rawMessages);
             case 'chat/click_thread':
                 _currentID = action.threadID;
-                this.__emitChange();
                 return state;
             default:
                 return state;

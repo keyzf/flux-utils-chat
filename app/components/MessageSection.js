@@ -19,6 +19,7 @@ class MessageSection extends Component {
     }
 
     static calculateState (prevState) {
+        MessageStore.setCurrentID(ThreadStore.getCurrentID())
         return {
             messages: MessageStore.getAllForCurrentThread(),
             thread: ThreadStore.getCurrent(),
@@ -26,7 +27,6 @@ class MessageSection extends Component {
     }
 
     render() {
-        console.log("render MessageSection")
         const message_list = [];
         if(this.state.messages.size === 0){
             return null;

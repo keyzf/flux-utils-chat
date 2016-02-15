@@ -11,14 +11,15 @@ class ThreadSection extends Component {
     static calculateState (prevState) {
         return {
             threads: ThreadStore.getState(),
-            unreadThreads: UnreadThreadStore.getState()
+            unreadThreads: UnreadThreadStore.getState(),
+            currentThreadID: ThreadStore.getCurrentID(),
         }
     }
     render() {
     	const threadListItems = [];
     	this.state.threads.forEach(function (thread) {
-            threadListItems.push(<ThreadListItem key={thread.id} thread={thread} />)
-    	})
+            threadListItems.push(<ThreadListItem key={thread.id} thread={thread} currentThreadID={this.state.currentThreadID}/>)
+    	}.bind(this))
         return (
             <div className="thread-secion">
             	<div className="thread-count">{this.state.unreadThreads.size}</div>

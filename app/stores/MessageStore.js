@@ -5,7 +5,7 @@ import dispatcher from "../dispatcher/ChatAppDispatcher";
 import ThreadStore from "./ThreadStore";
 import ChatMessageUtils from "../utils/ChatMessageUtils";
 
-let _eldThreadID = null;
+let _threadID = null;
 
 class MessageStore extends ReduceStore {
 	getInitialState () {
@@ -13,7 +13,6 @@ class MessageStore extends ReduceStore {
 	}
 
 	getAllForThread (threadID) {
-		_eldThreadID = threadID;
 		return this.getState().filter(msg => { return msg.threadID === threadID })
 	}
 
@@ -22,7 +21,11 @@ class MessageStore extends ReduceStore {
 	}
 
 	areEqual(one, two) {
-		return _eldThreadID === ThreadStore.getCurrentID() && one.equals(two);
+		return _threadID === ThreadStore.getCurrentID() && one.equals(two);
+	}
+
+	setCurrentID (newThreadID) {
+		_threadID = newThreadID;
 	}
 
 	reduce (state, action) {
