@@ -5,3 +5,8 @@
 未实现功能：
 1. `unreadstore`
 2. `local store` new message
+
+
+启动：
+1. npm install
+2. npm start
