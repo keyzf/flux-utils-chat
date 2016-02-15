@@ -37,6 +37,17 @@ class MessageStore extends ReduceStore {
 				}))
 			    dispatcher.waitFor([ThreadStore.getDispatchToken()]);
 			    return state;
+			case "chat/create_message":
+				let timestamp = Date.now();
+				let message = new Message({
+					id: "m_" + timestamp,
+					threadID: action.threadID,
+					authorName: 'Bill',
+					date: new Date(timestamp),
+					text: action.text,
+					isRead: true,
+				})
+				return state.set(message.id, message);
 			default:
 				return state;
 		}

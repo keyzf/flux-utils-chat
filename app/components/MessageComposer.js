@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {dispatch} from "../dispatcher/ChatAppDispatcher";
 
 const ENTER_KEY_CODE = 13;
 
@@ -31,7 +32,11 @@ export default class MessageComposer extends Component {
     		event.preventDefault();
     		let text = this.state.text.trim();
     		if (text) {
-    			console.log(text)
+                dispatch({
+                    type: "chat/create_message",
+                    text: text,
+                    threadID: this.props.threadID
+                })
     		}
     		this.setState({text: ""});
     	}
